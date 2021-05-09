@@ -1,16 +1,52 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { RouterModule } from "@angular/router";
 
-import { AppComponent } from './app.component';
+import {
+  EventListComponent,
+  EventCreateComponent,
+  EventDetailsComponent,
+  EventRouteActivator,
+  EventService,
+  EventsListResolver,
+  EventThumbnailComponent,
+} from "./events/index";
+import { EventsAppComponent } from "./events-app.component";
+import { NavBarComponent } from "./nav/navbar.component";
+import { ToastrService } from "./common/toastr.service";
+import { appRoutes } from "./routes";
+import { Error404Component } from "./errors/404.component";
 
 @NgModule({
+  imports: [BrowserModule, RouterModule.forRoot(appRoutes)],
   declarations: [
-    AppComponent
+    EventsAppComponent,
+    EventListComponent,
+    EventThumbnailComponent,
+    EventDetailsComponent,
+    NavBarComponent,
+    EventCreateComponent,
+    Error404Component,
   ],
-  imports: [
-    BrowserModule
+
+  providers: [
+    EventService,
+    ToastrService,
+    EventRouteActivator,
+    EventsListResolver,
+    {
+      provide: "canDeactivateCreateEvent",
+      useValue: ({ isDirty }: { isDirty: boolean }): boolean => {
+        if (isDirty) {
+          return window.confirm(
+            "You haven't saved this event. Are you sure you want to cancel?"
+          );
+        }
+
+        return true;
+      },
+    },
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [EventsAppComponent],
 })
-export class AppModule { }
+export class AppModule {}
