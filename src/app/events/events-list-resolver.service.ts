@@ -6,9 +6,9 @@ import { EventService } from "./shared/event.service";
 
 @Injectable()
 export class EventsListResolver implements Resolve<any[]> {
-  constructor(private eventService: EventService){}
+  constructor(private eventService: EventService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<any[]> {
-    return this.eventService.getEvents().pipe(map(events => events));
+    return this.eventService.getEvents().pipe(map((events) => events));
   }
 }

@@ -4,9 +4,7 @@ import { EventsAppComponent } from "./events-app.component";
 describe("AppComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        EventsAppComponent
-      ],
+      declarations: [EventsAppComponent],
     }).compileComponents();
   });
 
@@ -26,6 +24,8 @@ describe("AppComponent", () => {
     const fixture = TestBed.createComponent(EventsAppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector(".content span").textContent).toContain("ng-fundamentals app is running!");
+    expect(compiled.querySelector(".content span").textContent).toContain(
+      "ng-fundamentals app is running!"
+    );
   });
 });
