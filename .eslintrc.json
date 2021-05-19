@@ -23,7 +23,7 @@
         "@angular-eslint/component-selector": [
           "error",
           {
-            "prefix": ["event", "events", "nav"],
+            "prefix": ["event", "events", "nav", "session", "collapsible", "modal"],
             "style": "kebab-case",
             "type": "element"
           }
@@ -31,8 +31,8 @@
         "@angular-eslint/directive-selector": [
           "error",
           {
-            "prefix": ["event", "events", "nav"],
-            "style": "camelCase",
+            "prefix": ["event", "events", "nav", "session", "collapsible", "modal", "conditional"],
+            "style": "kebab-case",
             "type": "attribute"
           }
         ]

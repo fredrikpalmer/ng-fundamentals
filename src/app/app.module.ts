@@ -10,15 +10,44 @@ import {
   EventService,
   EventsListResolver,
   EventThumbnailComponent,
+  SessionCreateComponent,
+  SessionListComponent,
+  DurationPipe,
+  UpVoteComponent,
 } from "./events/index";
+import {
+  CollapsibleWellComponent,
+  TOASTR_TOKEN,
+  Toastr,
+  JQUERY_TOKEN,
+} from "./common";
 import { EventsAppComponent } from "./events-app.component";
 import { NavBarComponent } from "./nav/navbar.component";
-import { ToastrService } from "./common/toastr.service";
+import { SearchModalComponent } from "./nav/search-modal.component";
 import { appRoutes } from "./routes";
 import { Error404Component } from "./errors/404.component";
+import { AuthService } from "./user/auth.service";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ModalTriggerDirective } from "./common/modal-trigger.directive";
+import { VoterService } from "./events/shared/voter.service";
+import { DependentFieldValidatorDirective } from "./events/shared/dependent-field-validator.directive";
+declare global {
+  interface Window {
+    toastr: any;
+    $: any;
+  }
+}
+
+let toastr: Toastr = window["toastr"];
+let jQuery = window["$"];
 
 @NgModule({
-  imports: [BrowserModule, RouterModule.forRoot(appRoutes)],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(appRoutes),
+  ],
   declarations: [
     EventsAppComponent,
     EventListComponent,
@@ -26,12 +55,25 @@ import { Error404Component } from "./errors/404.component";
     EventDetailsComponent,
     NavBarComponent,
     EventCreateComponent,
+    SessionCreateComponent,
     Error404Component,
+    SessionListComponent,
+    CollapsibleWellComponent,
+    DurationPipe,
+    SearchModalComponent,
+    ModalTriggerDirective,
+    DependentFieldValidatorDirective,
+    UpVoteComponent,
   ],
 
   providers: [
+    AuthService,
+    {
+      provide: TOASTR_TOKEN,
+      useValue: toastr,
+    },
     EventService,
-    ToastrService,
+    VoterService,
     EventRouteActivator,
     EventsListResolver,
     {
@@ -45,6 +87,10 @@ import { Error404Component } from "./errors/404.component";
 
         return true;
       },
+    },
+    {
+      provide: JQUERY_TOKEN,
+      useValue: jQuery,
     },
   ],
   bootstrap: [EventsAppComponent],

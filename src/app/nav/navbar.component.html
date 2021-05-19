@@ -10,14 +10,16 @@
             <a [routerLink]="['/events']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">All Events</a>
           </li>
           <li><a [routerLink]="['/events/create']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Create Event</a></li>
+          <li><a *ngIf="eventId" [routerLink]="['events', eventId, 'sessions', 'create']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Create Session</a></li>
+
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
               Events
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li >
-                <a href="">Angular Connect</a>
+              <li *ngFor="let item of events">
+                <a [routerLink]="['/events', item.id]">{{item.name | titlecase}}</a>
               </li>
             </ul>
           </li>
@@ -25,18 +27,25 @@
         <div class="navbar-header navbar-right">
           <ul class="nav navbar-nav">
             <li>
-              <a [routerLink]="['/user/profile']" routerLinkActive="active" >Welcome John</a>
+              <a *ngIf="!auth.isAuthenticated()" [routerLink]="['/user/login']" routerLinkActive="active" >Login</a>
+              <a *ngIf="auth.isAuthenticated()" [routerLink]="['/user/profile']" routerLinkActive="active" >Welcome {{auth.currentUser.firstName}}</a>
             </li>
           </ul>
         </div>
-        <form id="searchForm"  class="navbar-form navbar-right"  >
+        <form id="searchForm" (ngSubmit)="searchSessions(searchTerm)" class="navbar-form navbar-right"  >
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search Sessions" >
+            <input [(ngModel)]="searchTerm" name="searchTerm" type="text" class="form-control" placeholder="Search Sessions" >
           </div>
-          <button class="btn btn-default" >
+          <button class="btn btn-default" modal-trigger="searchResults">
             Search
           </button>
         </form>
       </div>
     </div>
   </div>
+
+  <session-modal *ngIf="foundSessions?.length" elementId="searchResults" title="Matching Sessions">
+    <div class="list-group">
+      <a (click)="handleSessionClicked(session.eventId)" class="list-group-item" *ngFor="let session of foundSessions">{{session.name}}</a>
+    </div>
+  </session-modal>

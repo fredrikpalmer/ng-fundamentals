@@ -1,12 +1,14 @@
-import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { Injectable, EventEmitter } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { ISession } from "./event.model";
+import { IEvent } from "./index";
 
 @Injectable()
 export class EventService {
-  subject: Subject<any> = new Subject<any>();
+  subject: Subject<IEvent> = new Subject<IEvent>();
 
-  getEvents(): Subject<any[]> {
-    const subject = new Subject<any[]>();
+  getEvents(): Observable<IEvent[]> {
+    const subject = new Subject<IEvent[]>();
     setTimeout(() => {
       subject.next(EVENTS);
       subject.complete();
@@ -14,12 +16,37 @@ export class EventService {
     return subject;
   }
 
-  getEvent(id: number): any {
-    return EVENTS.find((evt) => evt.id === id);
+  getEvent(id: number): IEvent {
+    return EVENTS.find((evt) => evt.id === id)!;
+  }
+
+  saveEvent(formValues: IEvent) {
+    EVENTS.push({ ...formValues, id: 999, sessions: [] });
+  }
+
+  updateEvent(event: IEvent) {
+    const index = EVENTS.findIndex((x) => x.id === event.id);
+    EVENTS.splice(index, 1, event);
+  }
+
+  searchSessions(searchTerm: string): Observable<ISession[]> {
+    const results = EVENTS.map((evt) =>
+      evt.sessions.map((session) => ({ ...session, eventId: evt.id }))
+    )
+      .reduce((prev, cur) => prev.concat(cur))
+      .filter((session) =>
+        session.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+    const eventEmitter = new EventEmitter(true);
+    setTimeout(() => {
+      eventEmitter.emit(results);
+    }, 100);
+    return eventEmitter;
   }
 }
 
-const EVENTS = [
+const EVENTS: IEvent[] = [
   {
     id: 1,
     name: "Angular Connect",
