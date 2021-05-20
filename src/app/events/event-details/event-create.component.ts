@@ -43,7 +43,7 @@ export class EventCreateComponent {
     this.router.navigate(["/events"]);
   }
 
-  saveEvent(formValues: NgForm): void {
+  async saveEvent(formValues: NgForm): Promise<void> {
     Object.keys(formValues.controls).forEach((key) => {
       let c = formValues.controls[key];
       c?.updateValueAndValidity();
@@ -54,7 +54,7 @@ export class EventCreateComponent {
       return;
     }
 
-    this.eventService.saveEvent(formValues.value);
+    await this.eventService.saveEvent(formValues.value).toPromise();
     this.isDirty = false;
     this.router.navigate(["/events"]);
   }

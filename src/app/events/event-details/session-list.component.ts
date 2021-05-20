@@ -115,6 +115,7 @@ class ArrayLengthSortingStrategy implements ISortingStrategy<[]> {
   styleUrls: ["./session-list.component.css"],
 })
 export class SessionListComponent implements OnChanges {
+  @Input() eventId: number | undefined;
   @Input() sessions: ISession[] | undefined;
   @Input() filterBy!: string;
   @Input() sortBy!: string;
@@ -165,11 +166,23 @@ export class SessionListComponent implements OnChanges {
   }
 
   toggleVote(session: ISession): void {
+    if (this.eventId === undefined) {
+      return;
+    }
+
     const userName = this.auth.currentUser?.userName ?? "anonymous";
     if (session.voters.includes(userName)) {
-      this.voterService.removeVote(session, userName).subscribe();
+      this.voterService
+        .removeVote(this.eventId, session, userName)
+        .subscribe(() => {
+          session.voters.splice(session.voters.indexOf(userName), 1);
+        });
     } else {
-      this.voterService.addVote(session, userName).subscribe();
+      this.voterService
+        .addVote(this.eventId, session, userName)
+        .subscribe(() => {
+          session.voters.push(userName);
+        });
     }
   }
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { AuthService } from "src/app/user/auth.service";
 import { IEvent, ISession } from "../shared";
 import { EventService } from "../shared/event.service";
 import { SessionFilter } from "../shared/session.filter";
@@ -43,13 +42,14 @@ export class EventDetailsComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
-    private route: ActivatedRoute,
-    private auth: AuthService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.event = this.eventService.getEvent(+params.id);
+      this.eventService.getEvent(+params.id).subscribe((e) => {
+        this.event = e as IEvent;
+      });
       this.addMode = false;
     });
   }

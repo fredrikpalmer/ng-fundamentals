@@ -31,6 +31,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ModalTriggerDirective } from "./common/modal-trigger.directive";
 import { VoterService } from "./events/shared/voter.service";
 import { DependentFieldValidatorDirective } from "./events/shared/dependent-field-validator.directive";
+import { HttpClientModule } from "@angular/common/http";
 declare global {
   interface Window {
     toastr: any;
@@ -46,6 +47,7 @@ let jQuery = window["$"];
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes),
   ],
   declarations: [
