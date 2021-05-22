@@ -4,7 +4,6 @@ import {
   Input,
   OnChanges,
   Output,
-  SimpleChanges,
 } from "@angular/core";
 import { AuthService } from "src/app/user/auth.service";
 import { ISession } from "../shared";
@@ -131,7 +130,7 @@ export class SessionListComponent implements OnChanges {
 
   constructor(public auth: AuthService, private voterService: VoterService) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.sessions) {
       this.filterSessions(this.filterBy);
       this.visibleSessions?.sort((x, y) =>

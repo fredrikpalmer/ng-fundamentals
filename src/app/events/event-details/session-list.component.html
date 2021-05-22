@@ -5,7 +5,7 @@
   <div class="col-md-10">
     <collapsible-well>
       <div well-title>
-        {{session.name}}
+        {{ session.name | titlecase }}
         <i *ngIf="session.voters.length > 3" class="glyphicon glyphicon-fire" style="color: red;"></i>
       </div>
       <div well-body>

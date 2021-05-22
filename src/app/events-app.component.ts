@@ -7,6 +7,4 @@ import { Component } from "@angular/core";
     <router-outlet></router-outlet>
   `,
 })
-export class EventsAppComponent {
-  title = "app";
-}
+export class EventsAppComponent {}

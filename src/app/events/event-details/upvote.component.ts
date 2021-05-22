@@ -1,5 +1,5 @@
 /* eslint-disable @angular-eslint/component-selector */
-import { Component, Input, OnInit, EventEmitter, Output } from "@angular/core";
+import { Component, Input, EventEmitter, Output } from "@angular/core";
 
 @Component({
   selector: "upvote",
@@ -17,16 +17,12 @@ import { Component, Input, OnInit, EventEmitter, Output } from "@angular/core";
     </div>
   `,
 })
-export class UpVoteComponent implements OnInit {
+export class UpVoteComponent {
   @Input() count!: number;
   @Input() voted!: boolean;
   @Output() vote = new EventEmitter();
   get iconColor(): string {
     return this.voted ? "red" : "inherit";
-  }
-
-  ngOnInit(): void {
-    console.log("Init");
   }
 
   handleClick(): void {

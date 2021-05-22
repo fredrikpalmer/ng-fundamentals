@@ -6,7 +6,7 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.get("/events/:id", (req, res) => {
+app.get("/api/events/:id", (req, res) => {
   const event = EVENTS.find(e => e.id === +req.params.id);
   if(!!event === false){
     res.sendStatus(404);
@@ -15,7 +15,7 @@ app.get("/events/:id", (req, res) => {
   }
 });
 
-app.put("/events/:id", (req, res) => {
+app.put("/api/events/:id", (req, res) => {
   const event = req.body;
   if(!!event === false){
     res.status(404);
@@ -29,11 +29,11 @@ app.put("/events/:id", (req, res) => {
   }
 });
 
-app.get("/events", (req, res) => {
+app.get("/api/events", (req, res) => {
   res.send(EVENTS);
 });
 
-app.post("/events", (req, res) => {
+app.post("/api/events", (req, res) => {
   const event = req.body;
   if(!!event === false) {
     res.sendStatus(403);
@@ -44,7 +44,7 @@ app.post("/events", (req, res) => {
   }
 });
 
-app.post("/events/:id/sessions/:sessionId/voters", (req, res) => {
+app.post("/api/events/:id/sessions/:sessionId/voters", (req, res) => {
   const { id, sessionId } = req.params;
   const { userName } = req.body;
 
@@ -61,7 +61,7 @@ app.post("/events/:id/sessions/:sessionId/voters", (req, res) => {
   }
 });
 
-app.delete("/events/:id/sessions/:sessionId/voters", (req, res) => {
+app.delete("/api/events/:id/sessions/:sessionId/voters", (req, res) => {
   const { id, sessionId } = req.params;
   const { userName } = req.query;
 

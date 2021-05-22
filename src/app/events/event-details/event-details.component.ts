@@ -46,10 +46,8 @@ export class EventDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.eventService.getEvent(+params.id).subscribe((e) => {
-        this.event = e as IEvent;
-      });
+    this.route.data.forEach(({ event }) => {
+      this.event = event as IEvent;
       this.addMode = false;
     });
   }
@@ -58,15 +56,17 @@ export class EventDetailsComponent implements OnInit {
     this.addMode = true;
   }
 
-  saveNewSession(session: ISession): void {
+  async saveNewSession(session: ISession): Promise<void> {
     const nextId = Math.max.apply(
       null,
       this.event.sessions.map((x) => x.id)
     );
     session.id = nextId + 1 || 999;
     this.event.sessions.push(session);
-    this.eventService.updateEvent(this.event);
-    this.addMode = false;
+    const event = await this.eventService.updateEvent(this.event).toPromise();
+    if (!!event) {
+      this.addMode = false;
+    }
   }
 
   cancelNewSession(): void {
