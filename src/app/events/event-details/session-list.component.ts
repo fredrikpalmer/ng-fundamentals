@@ -173,14 +173,18 @@ export class SessionListComponent implements OnChanges {
     if (session.voters.includes(userName)) {
       this.voterService
         .removeVote(this.eventId, session, userName)
-        .subscribe(() => {
-          session.voters.splice(session.voters.indexOf(userName), 1);
+        .subscribe((voter) => {
+          if (voter !== undefined) {
+            session.voters.splice(session.voters.indexOf(userName), 1);
+          }
         });
     } else {
       this.voterService
         .addVote(this.eventId, session, userName)
-        .subscribe(() => {
-          session.voters.push(userName);
+        .subscribe((voter) => {
+          if (voter !== undefined) {
+            session.voters.push(voter);
+          }
         });
     }
   }

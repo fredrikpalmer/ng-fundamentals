@@ -1,10 +1,16 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const app = express();
 const port = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "/dist/ng-fundamentals")));
+
+app.get("/events*?", (req, res) => {
+  res.sendFile(path.join(__dirname, "/dist/ng-fundamentals/index.html"));
+});
 
 app.get("/api/events/:id", (req, res) => {
   const event = EVENTS.find(e => e.id === +req.params.id);
@@ -48,15 +54,19 @@ app.post("/api/events/:id/sessions/:sessionId/voters", (req, res) => {
   const { id, sessionId } = req.params;
   const { userName } = req.body;
 
-  let indices = EVENTS.filter((e, i) => e.id.toString() === id && e.sessions.some(s => s.id.toString() === sessionId))
-    .map((e, i) => ({ event: i, session: e.sessions.findIndex(s => s.id.toString() === sessionId) }))
+  console.log(`Add: ( id: ${id} sessionId: ${sessionId} voter: ${userName} )`);
+
+  let indices = EVENTS.filter((e, i) => e.id.toString() === id)
+    .map((e) => ({ event: EVENTS.findIndex(evt => evt.id.toString() === id), session: e.sessions.findIndex(s => s.id.toString() === sessionId) }))
     .reduce((prev, cur) => ({ ...prev, ...cur }));
 
   const session = EVENTS?.[indices?.event]?.sessions?.[indices?.session];
   if(!!session === false){
     res.sendStatus(404);
-  }else{
-    session.voters.push(userName)
+  } else if(session.voters.includes(userName)) {
+    res.sendStatus(409);
+  } else{
+    session.voters.push(userName);
     res.status(201).send(JSON.stringify(userName));
   }
 });
@@ -65,15 +75,20 @@ app.delete("/api/events/:id/sessions/:sessionId/voters", (req, res) => {
   const { id, sessionId } = req.params;
   const { userName } = req.query;
 
-  const indices = EVENTS.filter(e => e.id.toString() === id && e.sessions.some(s => s.id.toString() === sessionId))
-    .map((e, i) => ({ event: i, session: e.sessions.findIndex(s => s.id.toString() === sessionId) }))
+  console.log(`Delete: ( id: ${id} sessionId: ${sessionId} voter: ${userName} )`);
+
+  const indices = EVENTS.filter(e => e.id.toString() === id)
+    .map((e) => ({ event: EVENTS.findIndex(evt => evt.id.toString() === id), session: e.sessions.findIndex(s => s.id.toString() === sessionId) }))
     .reduce((prev, cur) => ({ ...prev, ...cur }));
 
   const session = EVENTS?.[indices?.event]?.sessions?.[indices?.session];
+  const index = session.voters.indexOf(userName);
+
   if(!!session === false){
     res.sendStatus(404);
-  }else{
-    const index = session.voters.indexOf(userName);
+  } else if(index === -1){
+    res.sendStatus(409);
+  } else{
     session.voters.splice(index, 1);
     res.sendStatus(204);
   }
