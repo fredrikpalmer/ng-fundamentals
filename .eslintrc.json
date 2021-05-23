@@ -36,7 +36,8 @@
             "style": "kebab-case",
             "type": "attribute"
           }
-        ]
+        ],
+        "no-var": "error"
       }
     },
     {
