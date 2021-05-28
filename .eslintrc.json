@@ -1,19 +1,21 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*",
-    "*.js"
-  ],
+  "ignorePatterns": ["projects/**/*", "*.js"],
+  "globals": {
+    "window": "writable",
+    "console": "readonly",
+    "jasmine": "readonly",
+    "describe": "readonly",
+    "beforeEach": "readonly",
+    "afterEach": "readonly",
+    "it": "readonly",
+    "expect": "readonly"
+  },
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json",
-          "e2e/tsconfig.json"
-        ],
+        "project": ["tsconfig.json", "e2e/tsconfig.json"],
         "createDefaultProgram": true
       },
       "extends": [
@@ -52,16 +54,13 @@
             "type": "attribute"
           }
         ],
-        "no-var": "error"
+        "no-var": "error",
+        "no-undef": "error"
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended"
-      ],
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
     }
   ]

@@ -33,6 +33,7 @@ import { VoterService } from "./events/shared/voter.service";
 import { DependentFieldValidatorDirective } from "./events/shared/dependent-field-validator.directive";
 import { HttpClientModule } from "@angular/common/http";
 import { EventResolver } from "./events/event-resolver.service";
+
 declare global {
   interface Window {
     toastr: any;
